@@ -1,0 +1,70 @@
+---
+import {render} from 'astro:content'
+import TOCScript from '@/components/TOCScript.astro'
+import PostLayout from '@/layouts/PostLayout.astro'
+import {type Post, getListedPosts} from '@/lib/content'
+import {Icon} from 'astro-icon/components'
+
+export async function getStaticPaths() {
+  const posts = await getListedPosts()
+  return posts.map((post, i) => {
+    const previous = posts[i + 1]
+    const next = posts[i - 1]
+    return {
+      params: {slug: post.id},
+      props: {...post, previous, next},
+    }
+  })
+}
+
+export type Props<T = Post> = T & {previous?: T; next?: T}
+const {previous, next, ...post} = Astro.props
+
+const {Content, remarkPluginFrontmatter: frontmatter, headings: _headings} = await render(post)
+const minutesRead = frontmatter.minutesRead as string
+const headings = _headings.filter((h) => h.depth === 3)
+---
+
+<PostLayout title={post.data.title} description={post.data.description}>
+  {headings.length > 0 && <TOCScript />}
+
+  <Fragment slot="title">
+    {post.data.title}
+  </Fragment>
+
+  <Fragment slot="description">
+    <span>{post.dataFormatted.date}</span>
+    <Icon name="material-symbols:search-activity-rounded" />
+    <span>{minutesRead}</span>
+  </Fragment>
+
+  <Fragment slot="aside-left">
+    <nav>
+      <a class="styled" href="/posts">
+        <Icon name="material-symbols:arrow-back" class="inline-block align-middle" />
+        <span>Posts</span>
+      </a>
+    </nav>
+    <div class="flex-1"></div>
+    {
+      headings.length > 0 && (
+        <div id="toc" class="prose hidden xl:block">
+          <h3>On This Page</h3>
+          <ol class="!mb-0">
+            {headings.map((heading) => (
+              <li class="!marker:font-normal">
+                <a class="text-gray-11" href={`#${heading.slug}`}>
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )
+    }
+  </Fragment>
+
+  <Fragment slot="article">
+    <Content />
+  </Fragment>
+</PostLayout>

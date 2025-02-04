@@ -8,7 +8,27 @@
     "preview": "astro preview",
     "astro": "astro"
   },
-  "dependencies": {
-    "astro": "^5.2.5"
+  "devDependencies": {
+    "@astrojs/react": "^4.1.2",
+    "@astrojs/sitemap": "^3.2.1",
+    "@fontsource-variable/source-serif-4": "^5.1.1",
+    "@fontsource/geist": "^5.0.1",
+    "@iconify-json/material-symbols": "^1.2.14",
+    "@types/node": "^22.13.1",
+    "@types/react": "18",
+    "@types/react-dom": "18",
+    "@vercel/og": "^0.6.5",
+    "astro": "^5.2.5",
+    "astro-compress": "^2.3.6",
+    "astro-icon": "^1.1.5",
+    "astro-purgecss": "^5.1.0",
+    "mdast-util-to-string": "^4.0.0",
+    "react": "18",
+    "react-dom": "18",
+    "reading-time": "^1.5.0",
+    "sharp": "^0.33.5",
+    "sharp-ico": "^0.1.5",
+    "unocss": "^65.4.3",
+    "unocss-preset-radix-colors": "^0.2.0"
   }
 }

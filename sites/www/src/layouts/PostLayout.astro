@@ -1,0 +1,46 @@
+---
+import '@/styles/prose.css'
+
+import type {Props as MetaTagsProps} from '@/components/MetaTags.astro'
+import BaseLayout from './BaseLayout.astro'
+
+type Props = MetaTagsProps
+const {...meta} = Astro.props
+---
+
+<BaseLayout {...meta}>
+  <main class="w-full h-full font-serif overflow-x-clip">
+    <div class="w-full h-full max-w-[96rem] mx-auto flex flex-col xl:flex-row">
+      <aside>
+        <div class="h-full flex flex-col p-5 md:pt-10 xl:p-10">
+          <slot name="aside-left" />
+        </div>
+      </aside>
+      <div class="flex-shrink-0 w-full h-full max-w-3xl px-5 mx-auto">
+        <div class="mt-10 mb-10 relative">
+          <h2 class="font-sans text-2xl font-extrabold">
+            <slot name="title" />
+          </h2>
+          <p class="text-gray-11 flex flex-row items-center gap-2">
+            <slot name="description" />
+          </p>
+        </div>
+        <article class="prose mb-5 xl:mb-10">
+          <slot name="article" />
+        </article>
+      </div>
+      <aside>
+        <div class="h-full flex flex-col px-5 xl:px-10">
+          <slot name="aside-right" />
+        </div>
+      </aside>
+    </div>
+  </main>
+</BaseLayout>
+
+<style scoped>
+  aside {
+    @apply static top-0 left-0 w-full max-w-3xl mx-auto 
+      xl:sticky xl:max-w-sm h-auto xl:h-svh;
+  }
+</style>
