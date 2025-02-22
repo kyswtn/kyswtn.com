@@ -1,0 +1,79 @@
+---
+import {getEntry} from 'astro:content'
+import AvatarSVG from '@/assets/avatar.svg'
+import FlowersSVG from '@/assets/flowers.svg'
+import LinkIcons from '@/components/LinkIcons.astro'
+import PerusalList from '@/components/PerusalList.astro'
+import PostsList from '@/components/PostsList.astro'
+import ProjectsList from '@/components/ProjectsList.astro'
+import Sidenote from '@/components/Sidenote.astro'
+import MainLayout from '@/layouts/MainLayout.astro'
+
+const websiteMeta = await getEntry('website', 'meta')
+if (!websiteMeta) throw new Error('Missing website/meta')
+---
+
+<MainLayout title={websiteMeta.data.title} description={websiteMeta.data.description}>
+  <Fragment slot="aside-left">
+    <div class="flex-1"></div>
+    <div class="hidden xl:block px-10 pb-10">
+      <LinkIcons links={websiteMeta.data.links} />
+    </div>
+  </Fragment>
+
+  <Fragment slot="title">
+    <div class="flex flex-row items-end gap-5 pb-5 xl:pb-10">
+      <AvatarSVG class="h-20 w-auto aspect-square" />
+      <div class="flex flex-col">
+        <h2 class="font-semibold text-2xl">{websiteMeta.data.title}</h2>
+        <div class="flex flex-row items-center gap-2.5 text-gray-11 font-sans">
+          <span>{websiteMeta.data.description}</span>
+        </div>
+      </div>
+    </div>
+  </Fragment>
+
+  <Fragment slot="article">
+    <Sidenote refback>
+      <blockquote>
+        Perhaps you want to learn more <a href="/posts/about">about me</a>?
+      </blockquote>
+    </Sidenote>
+
+    <h3>Posts</h3>
+    <PostsList />
+
+    <h3>Projects</h3>
+    <Sidenote side="left">
+      <p>
+        <span class="inline xl:hidden">Featuring a</span>
+        <span class="hidden xl:inline">A</span> few screengrabs from some of my recent <em
+          >personal</em
+        > works.
+      </p>
+    </Sidenote>
+    <ProjectsList />
+    <h3>Perusal</h3>
+    <Sidenote>
+      <p>Things I've read or been reading lately.</p>
+    </Sidenote>
+    <PerusalList />
+  </Fragment>
+
+  <Fragment slot="footnotes">
+    <div class="h-20"></div>
+    <div class="w-full flex flex-row items-end justify-between">
+      <div class="flex flex-col gap-5 xl:gap-0">
+        <div class="prose">
+          <!-- If you're using this as a template, please don't remove the credit. Thank you! -->
+          <a href="/posts/about#colophon" class="italic">Handcrafted</a> by <a
+            href="https://kyswtn.com">Kyaw</a
+          >.
+        </div>
+        <div class="text-gray-11 hidden xl:block">I love sidenotes, can you tell?</div>
+        <div class="block xl:hidden"><LinkIcons links={websiteMeta.data.links} /></div>
+      </div>
+      <FlowersSVG class="h-25 w-auto text-gray-11 mb-2.5 hidden xl:block" />
+    </div>
+  </Fragment>
+</MainLayout>

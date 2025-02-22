@@ -1,0 +1,65 @@
+---
+import {Icon} from 'astro-icon/components'
+
+const knownProviders = {
+  email: {
+    name: 'Email',
+    prefix: 'mailto:',
+    icon: 'simple-icons:protonmail',
+    color: 'var(--gray12)',
+  },
+  github: {
+    name: 'GitHub',
+    prefix: 'https://github.com/',
+    icon: 'simple-icons:github',
+    color: 'var(--gray11)',
+  },
+  bluesky: {
+    name: 'Bluesky',
+    prefix: 'https://bsky.app/profile/',
+    icon: 'simple-icons:bluesky',
+    color: 'var(--blue11)',
+  },
+  twitter: {
+    name: 'Twitter',
+    prefix: 'https://x.com/',
+    icon: 'simple-icons:x',
+    color: 'var(--gray12)',
+  },
+  rss: {
+    name: 'RSS Feed',
+    prefix: '',
+    icon: 'material-symbols:rss-feed',
+    color: 'var(--orange11)',
+  },
+}
+
+export type Props = {links: Record<string, string>}
+const links = Object.entries(Astro.props.links).map(([key, value]) => {
+  if (key in knownProviders) {
+    const provider = knownProviders[key as keyof typeof knownProviders]
+    return {
+      name: provider.name,
+      icon: provider.icon,
+      color: provider.color,
+      url: `${provider.prefix}${value}`,
+    }
+  }
+  return {
+    name: key,
+    color: 'var(--gray12)',
+    icon: 'material-symbols:arrow-outward',
+    url: value,
+  }
+})
+---
+
+<div class="flex flex-row flex-wrap gap-x-2.5">
+  {
+    links.map((link) => (
+      <a href={link.url} aria-label={link.name}>
+        <Icon name={link.icon} style={`color: ${link.color}`} />
+      </a>
+    ))
+  }
+</div>

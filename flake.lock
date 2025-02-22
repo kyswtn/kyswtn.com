@@ -1,0 +1,48 @@
+{
+  "nodes": {
+    "create-hcloud-nixos-snapshot": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740168838,
+        "narHash": "sha256-+3IiwzJz3vorRpK6MeXuM0FEz458EKUr3qU6ucl2g84=",
+        "owner": "kyswtn",
+        "repo": "create-hcloud-nixos-snapshot",
+        "rev": "d00c48797b1541d493bffeef79fbf55adc024409",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kyswtn",
+        "repo": "create-hcloud-nixos-snapshot",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1739863612,
+        "narHash": "sha256-UbtgxplOhFcyjBcNbTVO8+HUHAl/WXFDOb6LvqShiZo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "632f04521e847173c54fa72973ec6c39a371211c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "create-hcloud-nixos-snapshot": "create-hcloud-nixos-snapshot",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

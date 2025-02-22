@@ -1,0 +1,29 @@
+---
+import '@/styles/shiki.css'
+
+import MainLayout, {type Props as MainLayoutProps} from './MainLayout.astro'
+
+type Props = MainLayoutProps & {
+  padded?: boolean
+}
+const {padded = true, ...props} = Astro.props
+---
+
+<MainLayout {...props}>
+  <slot name="head" slot="head" />
+
+  <Fragment slot="aside-left">
+    <div class="flex flex-col xl:min-h-svh px-5 pt-5 lg:pt-10 xl:py-10 xl:pl-10 xl:pr-5">
+      <slot name="aside-left" />
+    </div>
+  </Fragment>
+
+  <Fragment slot="title">
+    <div class:list={['pb-10', padded && 'xl:pt-40']}>
+      <slot name="title" />
+    </div>
+  </Fragment>
+
+  <slot name="article" slot="article" />
+  <slot name="footnotes" slot="footnotes" />
+</MainLayout>

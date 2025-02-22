@@ -1,0 +1,78 @@
+---
+const {duration = 500, threshold = 0} = Astro.props
+---
+
+<!-- Largely based on https://github.com/florian-lefebvre/astro-loading-indicator/blob/main/package/src/LoadingIndicator.astro -->
+<style is:global>
+  #loading-indicator {
+    pointer-events: none;
+    background-color: var(--blueA8);
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    transition:
+      transform 500ms ease-out,
+      opacity calc(500ms / 2) ease-in;
+    transform: translate3d(0, 0, 0) scaleX(var(--progress, 0));
+    transform-origin: 0;
+  }
+</style>
+
+<script is:inline define:vars={{duration, threshold}}>
+  ;(() => {
+    let progress = 0.25
+    let opacity = 0
+    let trickleInterval = undefined
+    let thresholdTimeout = undefined
+
+    const element = document.createElement('div')
+    element.id = 'loading-indicator'
+    element.ariaHidden = 'true'
+
+    const setProgress = (_progress) => {
+      progress = _progress
+      element.style.setProperty('--progress', String(progress))
+    }
+
+    const setOpacity = (_opacity) => {
+      opacity = _opacity
+      element.style.setProperty('opacity', String(opacity))
+    }
+
+    setProgress(progress)
+    setOpacity(opacity)
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.prepend(element)
+    })
+
+    document.addEventListener('astro:before-preparation', () => {
+      thresholdTimeout = setTimeout(() => {
+        setOpacity(1)
+        trickleInterval = window.setInterval(() => {
+          setProgress(progress + Math.random() * 0.03)
+        }, duration)
+      }, threshold)
+    })
+
+    document.addEventListener('astro:before-swap', (e) => {
+      if (!thresholdTimeout) return
+      window.clearTimeout(thresholdTimeout)
+
+      e.newDocument.body.prepend(element)
+      window.clearInterval(trickleInterval)
+      trickleInterval = undefined
+
+      setProgress(1)
+      window.setTimeout(() => {
+        setOpacity(0)
+      }, duration / 2)
+
+      window.setTimeout(() => {
+        setProgress(0.25)
+      }, duration * 2)
+    })
+  })()
+</script>

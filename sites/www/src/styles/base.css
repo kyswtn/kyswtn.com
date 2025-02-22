@@ -1,0 +1,24 @@
+*::selection {
+  @apply bg-blue-5a;
+}
+
+.sr-only {
+  @apply hidden;
+}
+
+/* Dashed lists, inspired by brianlovin.com. */
+ul.dashed li {
+  @apply flex flex-col md:flex-row mb-5 md:mb-0 w-full;
+
+  .dash {
+    @apply flex-grow border-dashed border-gray-6 border-t-2 hidden md:flex mt-4 mx-5;
+  }
+
+  & > * {
+    display: block;
+    position: relative;
+    &:nth-child(1) {
+      flex-shrink: 0;
+    }
+  }
+}

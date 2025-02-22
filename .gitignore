@@ -1,0 +1,10 @@
+.DS_Store
+.direnv/
+node_modules/
+dist/
+.astro/
+.env*
+!.env.example
+.terraform/
+*.tfstate
+*.backup

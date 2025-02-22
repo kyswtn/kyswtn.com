@@ -1,0 +1,22 @@
+{
+  "name": "crafts",
+  "type": "module",
+  "version": "0.0.1",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "dependencies": {
+    "@radix-ui/colors": "^3.0.0",
+    "@react-three/drei": "^9.121.2",
+    "@react-three/fiber": "^8.17.12",
+    "@react-three/rapier": "^1.5.0",
+    "react": "18",
+    "react-dom": "18",
+    "three": "^0.172.0"
+  },
+  "devDependencies": {
+    "@types/react": "18",
+    "@types/react-dom": "18",
+    "@types/three": "^0.172.0"
+  }
+}

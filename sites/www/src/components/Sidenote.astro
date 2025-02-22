@@ -1,0 +1,30 @@
+---
+export type Props = {
+  side?: 'left' | 'right'
+  refback?: boolean
+}
+
+const {side = 'right', refback = false} = Astro.props
+---
+
+<aside class:list={['sidenote', refback && 'refback']}>
+  <div>
+    {
+      side === 'left' && (
+        <div>
+          <slot />
+        </div>
+      )
+    }
+  </div>
+  <div></div>
+  <div>
+    {
+      side === 'right' && (
+        <div>
+          <slot />
+        </div>
+      )
+    }
+  </div>
+</aside>

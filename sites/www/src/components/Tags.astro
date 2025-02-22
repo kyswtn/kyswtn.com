@@ -1,0 +1,19 @@
+---
+export type Tag = {id: string; name: string}
+export type Props = {
+  tags: Tag[]
+}
+
+const {tags} = Astro.props
+---
+
+<ul class="flex flex-wrap gap-2.5 font-sans">
+  {tags.map((tag) => <li>{tag.name}</li>)}
+</ul>
+
+<style scoped>
+  li {
+    @apply text-sm uppercase text-gray-11 font-semibold 
+    px-1.5 rounded-md border-1.5 border-gray-6 cursor-pointer;
+  }
+</style>

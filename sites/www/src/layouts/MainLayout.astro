@@ -1,0 +1,53 @@
+---
+import '@/styles/prose.css'
+
+import type {Props as MetaTagsProps} from '@/components/MetaTags.astro'
+import BaseLayout from './BaseLayout.astro'
+
+export type Props = MetaTagsProps & {
+  asideBorders?: boolean
+}
+const {asideBorders = false, ...meta} = Astro.props
+---
+
+<BaseLayout {...meta}>
+  <slot name="head" slot="head" />
+  <div class="w-full h-full max-w-full">
+    <div class="layout flex flex-col xl:flex-row xl:gap-5">
+      <aside>
+        <div
+          class:list={[
+            'flex flex-col xl:min-h-svh',
+            asideBorders && 'xl:border-r-1.5 border-gray-6 border-dashed',
+          ]}
+        >
+          <slot name="aside-left" />
+        </div>
+      </aside>
+      <main class="flex-shrink-0 max-w-3xl px-5 my-10 overflow-hidden">
+        <section>
+          <slot name="title" />
+        </section>
+        <article class:list={['prose']}>
+          <slot name="article" />
+        </article>
+        <section>
+          <slot name="footnotes" />
+        </section>
+      </main>
+      <aside></aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style scoped>
+  .layout {
+    @apply relative w-full h-full mx-auto max-w-[96rem];
+    & > * {
+      @apply w-full h-full mx-auto;
+    }
+  }
+  aside {
+    @apply max-w-3xl xl:sticky xl:top-0 xl:left-0 xl:max-w-sm;
+  }
+</style>
