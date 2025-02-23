@@ -48,6 +48,7 @@
   services.fail2ban.enable = true;
   services.tailscale.enable = true;
   networking.firewall.allowedTCPPorts = [ 80 443 22 ];
+  networking.firewall.allowedUDPPorts = [ config.services.tailscale.port ];
 
   system.stateVersion = "24.11";
 }
