@@ -31,7 +31,6 @@
             hcloud
             opentofu
             terraform-ls
-            # wrangler
 
             (pkgs.writeShellScriptBin "nixos-redeploy" ''
               ${nixos-rebuild}/bin/nixos-rebuild switch \

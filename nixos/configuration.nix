@@ -37,17 +37,17 @@
     pkgs.gitMinimal
   ];
 
-  services.fail2ban.enable = true;
   services.openssh = {
     enable = true;
     settings = {
       PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
       PermitRootLogin = "prohibit-password";
     };
   };
-
+  services.fail2ban.enable = true;
+  services.tailscale.enable = true;
   networking.firewall.allowedTCPPorts = [ 80 443 22 ];
-  networking.firewall.allowedUDPPorts = [ ];
 
   system.stateVersion = "24.11";
 }
