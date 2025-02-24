@@ -14,13 +14,13 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Mandatory configurations.
+  # Configure mandatory stuff.
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/Berlin";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Nix settings.
+  # Configure Nix.
   nix = {
     settings = {
       auto-optimise-store = true;
@@ -34,12 +34,7 @@ in
     };
   };
 
-  users.users.root = {
-    extraGroups = [ "docker" ];
-    openssh.authorizedKeys.keys = [ credentials.sshKey ];
-  };
-
-  # Networking.
+  # Configure networking (OpenSSH, Fail2Ban, Tailscale, CrowdSec etc).
   services.openssh = {
     enable = true;
     settings = {
@@ -53,18 +48,24 @@ in
   networking.firewall.allowedTCPPorts = [ 80 443 22 ];
   networking.firewall.allowedUDPPorts = [ config.services.tailscale.port ];
 
-  environment.systemPackages = map lib.lowPrio [
-    pkgs.curl
-    pkgs.gitMinimal
-  ];
-
-  # Docker & Containers.
+  # Configure Docker.
   virtualisation.docker.enable = true;
-  system.activationScripts.mkDockerNetworks = let docker = "${pkgs.docker}/bin/docker"; in ''
-    ${docker} network inspect traefik >/dev/null 2>&1 || ${docker} network create traefik
-  '';
+
+  # Configure root user.
+  users.users.root = {
+    extraGroups = [ "docker" ];
+    openssh.authorizedKeys.keys = [ credentials.sshKey ];
+  };
+
+  # Patch dynamic-linking to make vscode-server work.
+  programs.nix-ld.enable = true;
 
   # Setup Traefik.
+  system.activationScripts.mkTraefikNetwork =
+    let docker = "${pkgs.docker}/bin/docker"; in
+    ''
+      ${docker} network inspect traefik >/dev/null 2>&1 || ${docker} network create traefik
+    '';
   services.traefik = {
     enable = true;
     group = "docker";
@@ -108,6 +109,11 @@ in
       };
     };
   };
+
+  environment.systemPackages = map lib.lowPrio [
+    pkgs.curl
+    pkgs.gitMinimal
+  ];
 
   system.stateVersion = "24.11";
 }
