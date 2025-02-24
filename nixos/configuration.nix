@@ -1,4 +1,10 @@
 { config, lib, pkgs, ... }:
+let
+  credentials = rec {
+    sshKey = builtins.readFile ../generated/ssh-key.pub;
+    email = lib.lists.last (lib.strings.splitString " " sshKey);
+  };
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -24,13 +30,13 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 1w";
+      options = "--delete-older-than 7d";
     };
   };
 
   users.users.root = {
     extraGroups = [ "docker" ];
-    openssh.authorizedKeys.keys = [ (builtins.readFile ../id_ed25519.pub) ];
+    openssh.authorizedKeys.keys = [ credentials.sshKey ];
   };
 
   # Networking.
@@ -47,16 +53,61 @@
   networking.firewall.allowedTCPPorts = [ 80 443 22 ];
   networking.firewall.allowedUDPPorts = [ config.services.tailscale.port ];
 
-  # Docker.
+  environment.systemPackages = map lib.lowPrio [
+    pkgs.curl
+    pkgs.gitMinimal
+  ];
+
+  # Docker & Containers.
   virtualisation.docker.enable = true;
   system.activationScripts.mkDockerNetworks = let docker = "${pkgs.docker}/bin/docker"; in ''
     ${docker} network inspect traefik >/dev/null 2>&1 || ${docker} network create traefik
   '';
 
-  environment.systemPackages = map lib.lowPrio [
-    pkgs.curl
-    pkgs.gitMinimal
-  ];
+  # Setup Traefik.
+  services.traefik = {
+    enable = true;
+    group = "docker";
+    staticConfigOptions = {
+      log = {
+        level = "INFO";
+        format = "json";
+        filePath = "${config.services.traefik.dataDir}/traefik.log";
+      };
+      # Hot-reload on configuration updates.
+      providers.file = { watch = true; directory = "/etc/traefik"; };
+      providers.docker = {
+        endpoint = "unix:///var/run/docker.sock";
+        network = "traefik";
+        exposedByDefault = false;
+      };
+      entryPoints = {
+        web = {
+          address = ":80";
+          asDefault = true;
+          http.redirections.entrypoint = {
+            to = "websecure";
+            scheme = "https";
+          };
+        };
+        websecure = {
+          address = ":443";
+          asDefault = true;
+          http.tls.certResolver = "letsencrypt";
+        };
+      };
+      certificatesResolvers.letsencrypt.acme = {
+        email = credentials.email;
+        storage = "${config.services.traefik.dataDir}/acme.json";
+        httpChallenge.entryPoint = "web";
+      };
+      api = {
+        dashboard = true;
+        insecure = true;
+        debug = true;
+      };
+    };
+  };
 
   system.stateVersion = "24.11";
 }

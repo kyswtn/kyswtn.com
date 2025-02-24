@@ -33,10 +33,12 @@
             terraform-ls
 
             (pkgs.writeShellScriptBin "nixos-redeploy" ''
+              HOSTNAME="nixos"
+              SERVER_HOST="''\${1:-$HOSTNAME}"
               ${nixos-rebuild}/bin/nixos-rebuild switch \
-                --flake .#nixos --fast \
-                --build-host "root@$SERVER_IP"  \
-                --target-host "root@$SERVER_IP"
+                --flake .#$HOSTNAME --fast \
+                --build-host "root@$SERVER_HOST"  \
+                --target-host "root@$SERVER_HOST"
             '')
           ];
         };
