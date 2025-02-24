@@ -25,17 +25,16 @@ import proseCSS from './src/styles/prose.css?raw'
 import shikiCSS from './src/styles/shiki.css?raw'
 const styles = [baseCSS, proseCSS, shikiCSS].join('\n')
 
-if (
-  !process.env.SITE_URL ||
-  process.env.SITE_URL.startsWith('http://') ||
-  process.env.SITE_URL.startsWith('https://')
-) {
-  throw new Error('SITE_URL environment variable must be set, and without the protocol scheme')
+const domainName = process.env.VERCEL_URL
+if (!domainName || domainName.startsWith('http://') || domainName.startsWith('https://')) {
+  throw new Error(
+    '`VERCEL_URL` environment variable must be set' + ', and without the protocol scheme',
+  )
 }
 
 // https://astro.build/config
 export default defineConfig({
-  site: `https://${process.env.SITE_URL}`,
+  site: `https://${domainName}`,
   devToolbar: {
     enabled: false,
   },
