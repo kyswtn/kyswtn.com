@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/ana/:path*",
+      "destination": "https://analytics.kyswtn.com/:path*"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/journal",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/journal/:path*",
+      "destination": "/posts/:path*",
+      "permanent": true
+    }
+  ]
+}

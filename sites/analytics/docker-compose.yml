@@ -1,0 +1,43 @@
+networks:
+  traefik:
+    external: true
+
+volumes:
+  umami-db-data:
+
+
+services:
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    init: true
+    env_file: .env
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - traefik
+    healthcheck:
+      test: [ "CMD-SHELL", "curl http://localhost:3000/api/heartbeat" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.umami.rule=Host(`analytics.$DOMAIN`)"
+      - "traefik.http.routers.umami.entrypoints=websecure"
+      - "traefik.http.services.umami.loadbalancer.server.port=3000"
+
+  db:
+    image: postgres:15-alpine
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5

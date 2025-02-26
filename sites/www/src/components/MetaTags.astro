@@ -1,0 +1,38 @@
+---
+import path from 'node:path'
+import {getEntry} from 'astro:content'
+
+export type Props = {
+  title: string
+  description: string
+}
+const {title, description} = Astro.props
+
+let canonical: URL | undefined
+let ogImage: URL | undefined
+if (Astro.site) {
+  canonical = new URL(Astro.url.pathname, Astro.site)
+  ogImage = new URL(path.join(Astro.url.pathname, 'og.png'), Astro.site)
+}
+
+const websiteMeta = await getEntry('website', 'meta')
+if (!websiteMeta) throw new Error('Missing website/meta')
+
+const metaTags = [
+  {tag: 'meta', attrs: {name: 'description', content: description}},
+  {tag: 'link', attrs: {rel: 'canonical', href: canonical?.href}},
+  {tag: 'meta', attrs: {name: 'generator', content: Astro.generator}},
+  {tag: 'link', attrs: {rel: 'sitemap', href: '/sitemap-index.xml'}},
+  // OpenGraph Tags
+  {tag: 'meta', attrs: {property: 'og:title', content: title}},
+  {tag: 'meta', attrs: {property: 'og:type', content: 'article'}},
+  {tag: 'meta', attrs: {property: 'og:url', content: canonical?.href}},
+  {tag: 'meta', attrs: {property: 'og:description', content: description}},
+  {tag: 'meta', attrs: {property: 'og:site_name', content: websiteMeta.data.title}},
+  {tag: 'meta', attrs: {property: 'og:image', content: ogImage}},
+  // Twitter Tags
+  {tag: 'meta', attrs: {name: 'twitter:card', content: 'summary_large_image'}},
+]
+---
+
+{metaTags.map(({tag: Tag, attrs}) => <Tag {...(attrs as any)} />)}

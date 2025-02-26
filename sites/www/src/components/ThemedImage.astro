@@ -1,0 +1,32 @@
+---
+import {Picture} from 'astro:assets'
+import type {ImageMetadata} from 'astro'
+
+type Props = {
+  alt: string
+  light: ImageMetadata
+  dark: ImageMetadata
+  class?: string
+}
+
+const {alt, light, dark, class: className} = Astro.props
+const aspectRatio = light.width / light.height
+---
+
+<div
+  class:list={['relative overflow-hidden w-full h-auto', className]}
+  style={`aspect-ratio: ${aspectRatio}`}
+>
+  <div class="absolute left-0 top-0 w-full h-full hidden dark:block">
+    <Picture formats={['webp']} densities={[0.1, 0.5, 1]} src={dark} alt={alt} />
+  </div>
+  <div class="absolute left-0 top-0 w-full h-full block dark:hidden">
+    <Picture formats={['webp']} densities={[0.1, 0.5, 1]} src={light} alt={alt} />
+  </div>
+</div>
+
+<style scoped>
+  img {
+    @apply !w-full !h-full !m-0 !rounded-none object-cover;
+  }
+</style>

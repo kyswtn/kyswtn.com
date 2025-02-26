@@ -1,0 +1,35 @@
+---
+import '@/styles/base.css'
+
+import {ClientRouter} from 'astro:transitions'
+import AnalyticsScript from '@/components/AnalyticsScript.astro'
+import Fonts from '@/components/Fonts.astro'
+import LoadingIndicatorScript from '@/components/LoadingIndicatorScript.astro'
+import MetaTags, {type Props as MetaTagsProps} from '@/components/MetaTags.astro'
+import ThemeScript from '@/components/ThemeScript.astro'
+
+type Props = MetaTagsProps
+const {...meta} = Astro.props
+---
+
+<!doctype html>
+<html lang="en" transition:name="root" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{meta.title}</title>
+    <ThemeScript />
+    <Fonts />
+    <ClientRouter />
+    <LoadingIndicatorScript />
+    <AnalyticsScript />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <MetaTags {...meta} />
+    <slot name="head" />
+  </head>
+  <body class="font-serif antialiased text-xl leading-normal bg-gray-1 text-gray-12 w-full h-full">
+    <slot />
+  </body>
+</html>

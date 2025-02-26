@@ -1,0 +1,33 @@
+/* Disable italics in code samples. */
+.shiki,
+.shiki span,
+.astro-code,
+.astro-code span {
+  font-style: normal !important;
+}
+
+/* Disable background colors for inline code tags and code blocks. */
+.shiki,
+.astro-code,
+.shiki span {
+  background-color: transparent !important;
+}
+
+/* When dark mode is enabled, used --shiki-dark colors. */
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not(.light) .shiki,
+  :root:not(.light) .shiki span,
+  :root:not(.light) .astro-code,
+  :root:not(.light) .astro-code span {
+    color: var(--shiki-dark) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+}
+.dark .shiki,
+.dark .shiki span,
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  /* background: var(--shiki-dark-bg) !important; */
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}

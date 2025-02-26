@@ -1,0 +1,374 @@
+.prose {
+  color: var(--gray12);
+  --link-accent-color: var(--blue11);
+  --link-hover-color: var(--gray12);
+  --link-decoration-color: var(--gray8);
+  --list-marker-color: var(--gray12);
+  --border-color: var(--grayA3);
+  --inline-code-bg-color: var(--grayA2);
+  --mark-bg-color: var(--yellowA4);
+  --table-strip-bg-color: var(--grayA2);
+  --code-diff-add-bg-color: var(--greenA3);
+  --font-mono: 'Monaco', ui-monospace, 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New',
+    monospace;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose table {
+  margin: 1em 0;
+  line-height: 1.5;
+}
+.prose b,
+.prose strong {
+  font-weight: 600;
+}
+.prose p:first-child {
+  margin: 0 0 1em 0;
+}
+.prose p:last-child {
+  margin: 1em 0 0 0;
+}
+.prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--link-decoration-color);
+}
+.prose a:hover {
+  color: var(--link-hover-color);
+  text-decoration-color: var(--link-hover-color);
+}
+.prose a[data-footnote-ref] {
+  text-decoration: none;
+  color: var(--link-accent-color);
+}
+.prose blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  font-style: normal;
+  border-left: 3px solid var(--border-color);
+}
+
+/* Headings */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply font-sans;
+  font-weight: 600;
+  margin: 1.25em 0 1em;
+}
+
+/* Lists */
+.prose ol,
+.prose ul {
+  padding-left: 1.25em;
+}
+.prose ul {
+  list-style-type: disc;
+}
+.prose ol {
+  list-style-type: decimal;
+}
+.prose ol[type='A'] {
+  list-style-type: upper-alpha;
+}
+.prose ol[type='a'] {
+  list-style-type: lower-alpha;
+}
+.prose ol[type='A' s] {
+  list-style-type: upper-alpha;
+}
+.prose ol[type='a' s] {
+  list-style-type: lower-alpha;
+}
+.prose ol[type='I'] {
+  list-style-type: upper-roman;
+}
+.prose ol[type='i'] {
+  list-style-type: lower-roman;
+}
+.prose ol[type='I' s] {
+  list-style-type: upper-roman;
+}
+.prose ol[type='i' s] {
+  list-style-type: lower-roman;
+}
+.prose ol[type='1'] {
+  list-style-type: decimal;
+}
+.prose ol > li::marker,
+.prose ul > li::marker,
+.prose summary::marker {
+  color: var(--list-marker-color);
+}
+.prose ol > li::marker {
+  font-weight: 600;
+}
+
+/* Media */
+.prose img,
+.prose video {
+  display: block;
+  margin: 1em 0 1em -1em;
+  width: calc(100% + 2em);
+  max-width: calc(100% + 2em) !important;
+  overflow: hidden;
+}
+.prose figure,
+.prose picture {
+  margin: 1em 0;
+}
+.prose figcaption {
+  font-size: 0.875em;
+}
+
+/* Miscellaneous HTML semantic tags */
+.prose hr {
+  margin: 2em 0;
+  border: 1.5px solid var(--border-color);
+}
+.prose abbr {
+  cursor: help;
+}
+.prose kbd {
+  border: 1.5px solid var(--inline-code-bg-color);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.875em;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+}
+.prose details {
+  margin: 1em 0;
+  padding: 1.25rem 1.5rem;
+}
+.prose summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Tables */
+.prose table {
+  display: block;
+  margin: 1em 0 1em -1em;
+  border-collapse: collapse;
+  overflow-x: auto;
+  width: calc(100% + 2em);
+  border-style: solid;
+  border-color: var(--border-color);
+}
+.prose table::-webkit-scrollbar {
+  display: none;
+}
+.prose tr:nth-child(2n) {
+  background: var(--table-strip-bg-color);
+}
+.prose th {
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+}
+.prose td,
+.prose th {
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: var(--border-color);
+  padding: 0.05em 1em;
+  width: 100%;
+}
+.prose td:first-child,
+.prose th:first-child {
+  border-left-width: 0;
+}
+.prose td:last-child,
+.prose th:last-child {
+  border-right-width: 0;
+}
+
+/* Mark */
+.prose mark {
+  background: none;
+  position: relative;
+  color: inherit;
+}
+.prose mark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--mark-bg-color);
+  z-index: -10;
+}
+
+/* Code blocks and inline code spans */
+.prose code {
+  font-size: 0.875em;
+  letter-spacing: -0.01em; /* between tracking-normal & tracking-tight */
+}
+.prose pre,
+.prose code {
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  tab-size: 4;
+  hyphens: none;
+  font-family: var(--font-mono);
+}
+.prose :not(pre) > code {
+  padding: 3px 6px;
+  border-radius: 0.375rem;
+  background: var(--inline-code-bg-color);
+}
+
+/* Code blocks */
+.prose pre {
+  position: relative;
+  overflow-x: scroll;
+  width: calc(100% + 2.5rem);
+  margin-left: -1.25rem;
+  background: transparent;
+  padding: 1.25rem 0;
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1.5px 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.prose pre::-webkit-scrollbar {
+  display: none;
+}
+.prose pre code {
+  display: block;
+  min-width: 100%;
+  width: fit-content;
+  padding: 0 1.25rem;
+}
+
+/* Code block highlights and diffs */
+.prose pre code .highlighted {
+  display: inline-block;
+  width: calc(100% + 2.5rem);
+  background: var(--inline-code-bg-color);
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem;
+}
+.prose pre code .diff.add::before {
+  content: '+';
+  position: absolute;
+}
+.prose pre code .diff.add {
+  display: inline-block;
+  width: calc(100% + 2.5rem);
+  background: var(--code-diff-add-bg-color);
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem;
+}
+
+/* Add left and right borders to code blocks and table only on desktop. */
+@media (min-width: 768px /* md */) {
+  .prose pre {
+    border-width: 1.5px 1.5px;
+    border-radius: 0.5rem; /* 8px */
+  }
+  .prose table {
+    border-width: 0 1.5px;
+    border-radius: 0.5rem; /* 8px */
+  }
+  .prose img,
+  .prose video {
+    border-radius: 0.5rem; /* 8px */
+  }
+}
+
+/* Sidenotes
+  ---
+  Sidenotes are ultimately tied to the MainLayout and must be 
+  generated by remark in this particular structure for it to work.
+  ```
+  aside
+    div
+    div
+    div
+      div
+        p
+          text
+  ```
+*/
+.prose .sidenote {
+  color: var(--gray11);
+}
+.prose .sidenote > *:nth-child(2) {
+  width: 100%;
+  flex-shrink: 0;
+  max-width: 48rem;
+}
+.prose .sidenote.desktop-only {
+  display: none;
+}
+@media (min-width: 1280px /* xl */) {
+  .prose .sidenote {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+  .prose .sidenote.desktop-only {
+    display: flex;
+  }
+  .prose .sidenote > *:nth-child(1),
+  .prose .sidenote > *:nth-child(3) {
+    width: 100%;
+    max-width: 24rem;
+    position: relative;
+  }
+  .prose .sidenote.refback > *:nth-child(1) > *,
+  .prose .sidenote.refback > *:nth-child(3) > * {
+    transform: translateY(-50%);
+  }
+  .prose .sidenote > *:nth-child(1) > *,
+  .prose .sidenote > *:nth-child(3) > * {
+    transform: translateY(0);
+    position: absolute;
+    padding: 0 2.5rem 0 1.25rem;
+    & > * {
+      margin-top: 0;
+    }
+  }
+  .prose .sidenote > *:nth-child(1) > * {
+    text-align: right;
+    position: absolute;
+    right: 0;
+    padding: 0 2.5rem 0 2.5rem;
+  }
+}
+
+/* Astro's footnotes */
+.prose .footnotes {
+  border-top: 3px solid var(--border-color);
+  margin-top: 2em;
+  padding-top: 1em;
+}
+.prose .footnotes p {
+  margin: 0;
+}
+.prose .footnotes a[data-footnote-backref] {
+  text-decoration: none;
+  color: var(--link-accent-color);
+}
+
+/* Hyphenate better, credit to https://eatmon.co/blog/suggest-better-line-breaks-markdown. */
+@supports (hyphenate-limit-chars: 6 3) {
+  .prose :where(p, blockquote) {
+    hyphens: auto;
+    hyphenate-limit-chars: 6 3;
+  }
+}

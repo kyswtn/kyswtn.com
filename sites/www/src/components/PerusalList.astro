@@ -1,0 +1,25 @@
+---
+import {getCollection} from 'astro:content'
+import {formatDate} from '@/lib/dnt'
+
+let perusal = await getCollection('perusal')
+perusal = perusal.sort((prev, next) => next.data.date.valueOf() - prev.data.date.valueOf())
+---
+
+<ul class="!pl-0 dashed">
+  {
+    perusal.map((project) => (
+      <li>
+        {project.data.url ? (
+          <a class="!decoration-none" href={project.data.url}>
+            {project.data.title}
+          </a>
+        ) : (
+          <span>{project.data.title}</span>
+        )}
+        <div class="dash" />
+        <div class="text-gray-11">{project.data.author ?? formatDate(project.data.date)}</div>
+      </li>
+    ))
+  }
+</ul>

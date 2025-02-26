@@ -1,0 +1,21 @@
+---
+import {getCollection} from 'astro:content'
+import {formatDate} from '@/lib/dnt'
+
+let posts = await getCollection('posts', (post) => !post.data.unlisted)
+posts = posts.sort((prev, next) => next.data.date.valueOf() - prev.data.date.valueOf())
+---
+
+<ul class="!pl-0 dashed">
+  {
+    posts.map((post) => (
+      <li>
+        <a class="!decoration-none" href={`/posts/${post.id}`}>
+          {post.data.title}
+        </a>
+        <div class="dash" />
+        <div class="text-gray-11">{formatDate(post.data.date)}</div>
+      </li>
+    ))
+  }
+</ul>

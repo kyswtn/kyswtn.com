@@ -1,0 +1,38 @@
+---
+import {getCollection} from 'astro:content'
+import {formatDate} from '@/lib/dnt'
+import ThemedImage from './ThemedImage.astro'
+
+let projects = await getCollection('projects', (project) => !project.data.unlisted)
+projects = projects.sort((prev, next) => next.data.date.valueOf() - prev.data.date.valueOf())
+
+const images = projects
+  .filter((project) => project.data.image !== undefined)
+  .map((project) => ({alt: project.data.title, image: project.data.image!}))
+---
+
+<div class="my-[1.5em] grid grid-cols-1 sm:grid-cols-2 max-w-xl gap-5">
+  {
+    images.map(({alt, image}) => (
+      <ThemedImage
+        class="border-1.5 border-gray-3 rounded"
+        alt={alt}
+        light={image.light}
+        dark={image.dark}
+      />
+    ))
+  }
+</div>
+<ul class="!pl-0 dashed">
+  {
+    projects.map((project) => (
+      <li>
+        <a class="!decoration-none" href={project.data.redirect}>
+          {project.data.title}
+        </a>
+        <div class="dash" />
+        <div class="text-gray-11">{formatDate(project.data.date)}</div>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,32 @@
+---
+import type {MarkdownHeading} from 'astro'
+
+export type Props = {
+  headings: MarkdownHeading[]
+}
+
+const {headings} = Astro.props
+---
+
+<div id="toc">
+  <h3 class="font-sans font-semibold mt-[1.25em] mx-0 mb-[1em]">On This Page</h3>
+  <ol class="list-decimal-inside">
+    {
+      headings.map((heading) => (
+        <li>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style scoped>
+  a {
+    @apply text-gray-11;
+  }
+
+  a[aria-current='true'] {
+    @apply text-gray-12;
+  }
+</style>

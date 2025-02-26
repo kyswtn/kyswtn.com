@@ -1,0 +1,30 @@
+---
+// Use Geist's ExtraBold which looks a bit better than Bold.
+// Use Source Serif 4's Italic which looks really good, unlike slanted variation.
+
+import '@fontsource/geist/400.css'
+import '@fontsource/geist/600.css'
+import '@fontsource/geist/800.css'
+import '@fontsource-variable/source-serif-4'
+import '@fontsource-variable/source-serif-4/wght-italic.css'
+import '@/styles/font-fallbacks.css'
+
+import sourceSerifLatinWghtItalic from '@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-italic.woff2?url'
+import sourceSerifLatinWghtNormal from '@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2?url'
+import geistLatin400Normal from '@fontsource/geist/files/geist-latin-400-normal.woff2?url'
+import geistLatin600Normal from '@fontsource/geist/files/geist-latin-600-normal.woff2?url'
+import geistLatin800Normal from '@fontsource/geist/files/geist-latin-800-normal.woff2?url'
+const preloadFonts = [
+  geistLatin400Normal,
+  geistLatin600Normal,
+  geistLatin800Normal,
+  sourceSerifLatinWghtNormal,
+  sourceSerifLatinWghtItalic,
+]
+---
+
+{
+  preloadFonts.map((url) => (
+    <link rel="preload" href={url} as="font" type="font/woff2" crossorigin />
+  ))
+}

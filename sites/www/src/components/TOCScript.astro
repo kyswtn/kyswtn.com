@@ -1,0 +1,73 @@
+<script>
+  let observer: IntersectionObserver | undefined
+  let onResize: (() => void) | undefined
+
+  const onIdle = (cb: IdleRequestCallback) =>
+    (window.requestIdleCallback || ((cb) => setTimeout(cb, 1)))(cb)
+
+  function setup() {
+    // Clean up previous observer & resize event listener (when page changed).
+    if (observer) {
+      observer.disconnect()
+      observer = undefined
+    }
+    if (onResize) {
+      window.removeEventListener('resize', onResize)
+      onResize = undefined
+    }
+
+    // If there's no TOC, return early.
+    let toc = document.querySelector('#toc')
+    if (!toc) return
+
+    // Mark current anchor with aria-current attribute.
+    let currentAnchor = toc.querySelector<HTMLAnchorElement>('a[aria-current="true"]')
+    const setCurrentAnchor = (target: HTMLAnchorElement) => {
+      if (target === currentAnchor) return
+      if (currentAnchor) currentAnchor.removeAttribute('aria-current')
+      target.setAttribute('aria-current', 'true')
+      currentAnchor = target
+    }
+
+    // Define observe function, which will start the intersection observer.
+    const links = [...toc.querySelectorAll<HTMLAnchorElement>('a')]
+    const headings = [...document.querySelectorAll<HTMLHeadingElement>('article h3')]
+    const onIntersect: IntersectionObserverCallback = (entries) => {
+      for (const {isIntersecting, target} of entries) {
+        if (!isIntersecting) continue
+
+        let id = target.getAttribute('id')
+        if (!id) continue
+        id = encodeURIComponent(id)
+
+        const link = links.find((link) => link.hash === `#${id}`)
+        if (link) {
+          setCurrentAnchor(link)
+          break
+        }
+      }
+    }
+    const observe = () => {
+      // Clean up previous observer (when size changes).
+      if (observer) {
+        observer.disconnect()
+        observer = undefined
+      }
+      observer = new IntersectionObserver(onIntersect, {threshold: 1})
+      headings.forEach((h) => observer!.observe(h))
+    }
+
+    // Start observing on idle.
+    onIdle(observe)
+
+    // On resizes, wait for 200ms and re-observe.
+    let timeout: NodeJS.Timeout
+    onResize = () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => onIdle(observe), 200)
+    }
+    window.addEventListener('resize', onResize)
+  }
+
+  document.addEventListener('astro:page-load', setup)
+</script>
