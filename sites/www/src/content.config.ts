@@ -61,4 +61,18 @@ const perusal = defineCollection({
   }),
 })
 
-export const collections = {website, posts, tags, projects, perusal}
+const micro = defineCollection({
+  loader: glob({pattern: '**/*.{md,mdx}', base: '../../notes/micro'}),
+  schema: z.object({
+    status: z
+      .object({
+        icon: z.string().optional(),
+        text: z.string().optional(),
+        color: z.enum(['gray', 'red', 'green', 'yellow', 'orange', 'blue']),
+      })
+      .optional(),
+    date: z.coerce.date(),
+  }),
+})
+
+export const collections = {website, posts, tags, projects, perusal, micro}

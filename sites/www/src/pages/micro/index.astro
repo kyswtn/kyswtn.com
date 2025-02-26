@@ -1,0 +1,67 @@
+---
+import {type CollectionEntry, getCollection, render} from 'astro:content'
+import MicroStatus from '@/components/MicroStatus.astro'
+import PostLayout from '@/layouts/PostLayout.astro'
+import {formatDate} from '@/lib/dnt'
+import {Icon} from 'astro-icon/components'
+
+let posts = await getCollection('micro')
+posts = posts.sort((prev, next) => next.data.date.valueOf() - prev.data.date.valueOf())
+const lastUpdated = posts.length < 1 ? '-' : formatDate(posts[0].data.date)
+
+const postsRendered = await Promise.all(
+  posts.map(async (post) => {
+    const renderedResult = await render(post)
+    return {...renderedResult, data: post.data}
+  }),
+)
+---
+
+<PostLayout padded={false} title="Micro" description="Notes, thoughts, opinions">
+  <Fragment slot="aside-left">
+    <nav>
+      <a class="styled font-sans" href="/">
+        <Icon name="material-symbols:arrow-back" class="inline-block align-middle" />
+        <span>Home</span>
+      </a>
+    </nav>
+    <div class="flex-1"></div>
+  </Fragment>
+
+  <Fragment slot="title">
+    <div class="flex flex-col">
+      <h2 class="font-semibold text-2xl">Micro</h2>
+      <div class="flex flex-row items-center gap-2.5 text-gray-11 font-sans">
+        Short notes, thoughts, opinions, announcements
+      </div>
+    </div>
+  </Fragment>
+
+  <Fragment slot="article">
+    {
+      postsRendered.map(({Content, data}, i) => (
+        <div class="">
+          <div class="flex flex-row items-center font-sans font-semibold text-lg text-gray-11 gap-3">
+            <MicroStatus status={data.status} />
+            <div class="flex flex-row items-center gap-1.5">
+              <Icon name="material-symbols:calendar-today-outline" />
+              {formatDate(data.date)}
+            </div>
+          </div>
+          <div class="mt-[1em]">
+            <Content />
+          </div>
+          {postsRendered.length > i + 1 && <hr />}
+        </div>
+      ))
+    }
+  </Fragment>
+
+  <Fragment slot="footnotes"></Fragment>
+</PostLayout>
+
+<style is:global>
+  aside:nth-of-type(1) {
+    @apply xl:border-r-1.5 border-dashed border-gray-6;
+  }
+</style>

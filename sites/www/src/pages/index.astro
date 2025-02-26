@@ -2,6 +2,7 @@
 import {getEntry} from 'astro:content'
 import AvatarSVG from '@/assets/avatar.svg'
 import FlowersSVG from '@/assets/flowers.svg'
+import SparklesSVG from '@/assets/sparkles.svg'
 import LinkIcons from '@/components/LinkIcons.astro'
 import PerusalList from '@/components/PerusalList.astro'
 import PostsList from '@/components/PostsList.astro'
@@ -42,6 +43,10 @@ if (!websiteMeta) throw new Error('Missing website/meta')
 
     <h3>Posts</h3>
     <PostsList />
+    <p class="text-gray-11">
+      See <a href="/micro">/micro</a> for more frequent updates.
+      <SparklesSVG class="inline-block ml-1.5 text-green-11" />
+    </p>
 
     <h3>Projects</h3>
     <Sidenote side="left">

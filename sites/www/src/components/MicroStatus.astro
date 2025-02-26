@@ -1,0 +1,29 @@
+---
+import type {CollectionEntry} from 'astro:content'
+import {Icon} from 'astro-icon/components'
+
+export type Props = {
+  status?: CollectionEntry<'micro'>['data']['status']
+}
+
+const iconsMapping = {
+  asterisk: 'material-symbols:asterisk',
+  chat: 'material-symbols:chat-bubble-rounded',
+  code: 'material-symbols:code',
+  neutral: 'material-symbols:sentiment-neutral-outline',
+  cloudy: 'material-symbols:partly-cloudy-day-outline',
+}
+
+const {status, ...props} = Astro.props
+const icon = status?.icon as keyof typeof iconsMapping | undefined
+const color = status?.color ?? 'gray'
+---
+
+{
+  (status?.icon || status?.text) && (
+    <div class="flex flex-row items-center gap-1.5" style={`color: var(--${color}11)`}>
+      {icon && <Icon name={iconsMapping[icon] ?? iconsMapping.asterisk} />}
+      {status.text}
+    </div>
+  )
+}
