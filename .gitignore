@@ -5,6 +5,7 @@ dist/
 .astro/
 .env*
 !.env.example
+!.env.1password
 .terraform/
 *.tfstate
 *.backup
