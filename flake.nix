@@ -40,6 +40,26 @@
                 --build-host "root@$SERVER_HOST"  \
                 --target-host "root@$SERVER_HOST"
             '')
+
+            (pkgs.writeShellScriptBin "deploy-compose" ''
+              set -euo pipefail
+
+              FOLDER_PATH="$1"
+              FOLDER_NAME=$(basename "$FOLDER_PATH")
+
+              if [ ! -f "$FOLDER_PATH/.env" ]; then
+                read -p "No .env file found in $FOLDER_PATH. Continue? [y/N] " -n 1 -r
+                echo
+                [[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
+              fi
+
+              HOSTNAME="nixos"
+              SERVER_HOST="''\${2:-$HOSTNAME}"
+ 
+              ssh "$SERVER_HOST" "mkdir -p /root/$FOLDER_NAME"
+              rsync -avz "$FOLDER_PATH/" "$SERVER_HOST:/root/$FOLDER_NAME/"
+              ssh "$SERVER_HOST" "cd /root/$FOLDER_NAME && docker compose up -d"
+            '')
           ];
         };
       });
