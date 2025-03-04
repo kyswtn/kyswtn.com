@@ -25,7 +25,7 @@ services:
       retries: 5
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.umami.rule=Host(`analytics.$DOMAIN`)"
+      - "traefik.http.routers.umami.rule=Host(`analytics.kyswtn.com`)"
       - "traefik.http.routers.umami.entrypoints=websecure"
       - "traefik.http.services.umami.loadbalancer.server.port=3000"
     env_file: .env

@@ -1,0 +1,17 @@
+networks:
+  traefik:
+    external: true
+
+services:
+  linkding:
+    image: sissbruecker/linkding:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - /srv/linkding-data:/etc/linkding/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.umami.rule=Host(`bookmarks.kyswtn.com`)"
+      - "traefik.http.routers.umami.entrypoints=websecure"
+      - "traefik.http.services.umami.loadbalancer.server.port=9090"

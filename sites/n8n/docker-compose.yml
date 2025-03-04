@@ -10,7 +10,13 @@ services:
   n8n:
     image: docker.n8n.io/n8nio/n8n
     restart: unless-stopped
-    env_file: .env
+    environment:
+      N8N_HOST: "n8n.kyswtn.com"
+      N8N_PORT: "5678"
+      N8N_PROTOCOL: "https"
+      NODE_ENV: "production"
+      WEBHOOK_URL: "https://${N8N_HOST}"
+      GENERIC_TIMEZONE: "Europe/Berlin"
     networks:
       - traefik
     volumes:
@@ -20,4 +26,4 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.n8n.rule=Host(`$N8N_HOST`)"
       - "traefik.http.routers.n8n.entrypoints=websecure"
-      - "traefik.http.services.n8n.loadbalancer.server.port=$PORT"
+      - "traefik.http.services.n8n.loadbalancer.server.port=$N8N_PORT"

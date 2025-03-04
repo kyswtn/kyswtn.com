@@ -47,8 +47,8 @@
               FOLDER_PATH="$1"
               FOLDER_NAME=$(basename "$FOLDER_PATH")
 
-              if [ ! -f "$FOLDER_PATH/.env" ]; then
-                read -p "No .env file found in $FOLDER_PATH. Continue? [y/N] " -n 1 -r
+              if [ -f "$FOLDER_PATH/.env.example" ] && [ ! -f "$FOLDER_PATH/.env" ]; then
+                read -p "No .env file found in $FOLDER_PATH but .env.example exists. Continue? [y/N] " -n 1 -r
                 echo
                 [[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
               fi
