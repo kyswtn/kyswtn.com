@@ -12,6 +12,6 @@ services:
       - /srv/linkding-data:/etc/linkding/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.umami.rule=Host(`bookmarks.kyswtn.com`)"
-      - "traefik.http.routers.umami.entrypoints=websecure"
-      - "traefik.http.services.umami.loadbalancer.server.port=9090"
+      - "traefik.http.routers.bookmarks.rule=Host(`bookmarks.kyswtn.com`)"
+      - "traefik.http.routers.bookmarks.entrypoints=websecure"
+      - "traefik.http.services.bookmarks.loadbalancer.server.port=9090"
