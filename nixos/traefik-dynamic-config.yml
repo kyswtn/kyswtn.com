@@ -1,0 +1,6 @@
+http:
+  routers:
+    api:
+      rule: Host(`traefik.kyswtn.com`)
+      entrypoints: websecure
+      service: api@internal
