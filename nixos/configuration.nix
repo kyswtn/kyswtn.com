@@ -60,6 +60,47 @@ in
   # Patch dynamic-linking to make vscode-server work.
   programs.nix-ld.enable = true;
 
+  # Install these.
+  environment.systemPackages = map lib.lowPrio [
+    pkgs.curl
+    pkgs.gitMinimal
+    pkgs.restic
+  ];
+
+  # Backup /srv to Cloudflare R2 everyday.
+  system.activationScripts.init-restic-repo = ''
+    # Set environment variables.
+    set -a
+    source /.restic-env
+    set +a
+
+    # Check if repository exists using cat config.
+    if ! ${pkgs.restic}/bin/restic cat config &>/dev/null; then
+      echo "Initializing new restic repository..."
+      ${pkgs.restic}/bin/restic init
+    else
+      echo "Restic repository already initialized."
+    fi
+  '';
+  systemd.services.backup-srv = {
+    description = "Backup /srv to Cloudflare R2";
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      ExecStart = "${pkgs.restic}/bin/restic backup /srv";
+      EnvironmentFile = "/.restic-env";
+    };
+  };
+  systemd.timers.backup-srv = {
+    description = "Timer for daily /srv backup to Cloudflare R2";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "daily";
+      Persistent = true;
+      Unit = "backup-srv.service";
+    };
+  };
+
   # Setup Traefik.
   system.activationScripts.prepareTraefik =
     let docker = "${pkgs.docker}/bin/docker"; in
@@ -117,11 +158,6 @@ in
       };
     };
   };
-
-  environment.systemPackages = map lib.lowPrio [
-    pkgs.curl
-    pkgs.gitMinimal
-  ];
 
   system.stateVersion = "24.11";
 }
