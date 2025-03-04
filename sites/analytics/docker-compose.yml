@@ -1,4 +1,5 @@
 networks:
+  umami:
   traefik:
     external: true
 
@@ -9,13 +10,13 @@ volumes:
 services:
   umami:
     image: ghcr.io/umami-software/umami:postgresql-latest
-    init: true
-    env_file: .env
     restart: unless-stopped
+    init: true
     depends_on:
       db:
         condition: service_healthy
     networks:
+      - umami
       - traefik
     healthcheck:
       test: [ "CMD-SHELL", "curl http://localhost:3000/api/heartbeat" ]
@@ -27,13 +28,16 @@ services:
       - "traefik.http.routers.umami.rule=Host(`analytics.$DOMAIN`)"
       - "traefik.http.routers.umami.entrypoints=websecure"
       - "traefik.http.services.umami.loadbalancer.server.port=3000"
+    env_file: .env
+    environment:
+      DATABASE_TYPE: "postgresql"
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}"
 
   db:
     image: postgres:15-alpine
-    env_file: .env
     restart: unless-stopped
     networks:
-      - traefik
+      - umami
     volumes:
       - umami-db-data:/var/lib/postgresql/data
     healthcheck:
@@ -41,3 +45,25 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    env_file: .env
+
+  backup:
+    image: prodrigestivill/postgres-backup-local
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - umami
+    volumes:
+      - /srv/umami-postgres-backups:/backups
+    env_file: .env
+    environment:
+      POSTGRES_HOST: "db"
+      POSTGRES_EXTRA_OPTS: "-Z1 --schema=public --blobs"
+      SCHEDULE: "@daily"
+      BACKUP_ON_START: "TRUE"
+      BACKUP_KEEP_DAYS: "7"
+      BACKUP_KEEP_WEEKS: "4"
+      BACKUP_KEEP_MONTHS: "6"
+      HEALTHCHECK_PORT: "8080"
