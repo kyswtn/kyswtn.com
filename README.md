@@ -1,8 +1,10 @@
-Source code powering [kyswtn.com](https://kyswtn.com) and some of my _public_ personal infrastructure.
+Source code powering [kyswtn.com](https://kyswtn.com) and my _public_ personal infrastructure.
 
-Feel free to use this as a reference, but not a template. Copies about myself are about me, so you should rewrite them. Most if not all illustrations and some assets are licensed and paid products, you may not use them. No AI is used.
+Feel free to use this as a reference, but not a template. Copies about myself are about me, so you should rewrite them. Most if not all illustrations and assets are licensed and paid products, you may not use them. Some credentials are hard-coded, you must replace them.
 
 ![A screenshot of an article of mine](./.github/screenshot.jpg)
+
+The entire monorepo is massively reproducible and entirely declarative to the point with proper environment variables, just by renaming occurrences of my domain name, anyone could get the exact same personal infrastructure setup.
 
 ### Documentation
 
@@ -31,4 +33,6 @@ Terraform provisions the VPS behind a [firewall](https://docs.hetzner.com/cloud/
 
 Once provisioned, the VPS is then configured remotely via [`nixos-rebuild`](https://wiki.nixos.org/wiki/Nixos-rebuild). On the first [SSH](https://www.openssh.com) session, [Tailscale](http://tailscale.com) is setup and SSH is promptly turned off. Tailscale’s [MagicDNS](https://tailscale.com/kb/1081/magicdns) binds the server to a hostname, avoiding the problem of having to remember IPs.
 
-NixOS configurations setup [Docker](https://www.docker.com) and [Traefik](https://traefik.io/traefik). Traefik handles routing, SSL/TLS certificates, and load balancing. Its dashboard is made accessible at `traefik` subdomain only within Tailscale’s private network.
+NixOS configurations setup [Docker](https://www.docker.com) and [Traefik](https://traefik.io/traefik). Traefik handles routing, SSL/TLS certificates, and load balancing with it's [Docker Provider](https://doc.traefik.io/traefik/reference/install-configuration/providers/docker). Its dashboard is made accessible at `traefik` subdomain only within Tailscale’s private network.
+
+Many other services such as [Linkding](https://linkding.link) for bookmarks, [N8n](https://n8n.io) for automations etc. are implemented as [Docker Compose](https://docs.docker.com/compose) configuration files within `./sites`. Each service is configured either with [named external volumes](https://docs.docker.com/engine/storage/volumes) and handles it's own database backup or with [bind mounts](https://docs.docker.com/engine/storage/bind-mounts) within `/srv`. `/srv` is then backed up to Cloudflare R2 on a [daily basis](https://wiki.nixos.org/wiki/Systemd/timers/en) using [Restic](https://restic.net).
