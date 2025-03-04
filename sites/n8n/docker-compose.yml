@@ -1,0 +1,23 @@
+networks:
+  traefik:
+    external: true
+
+volumes:
+  n8n_data:
+
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - traefik
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./local_files:/files
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`$N8N_HOST`)"
+      - "traefik.http.routers.n8n.entrypoints=websecure"
+      - "traefik.http.services.n8n.loadbalancer.server.port=$PORT"
