@@ -9,7 +9,7 @@ services:
     networks:
       - traefik
     volumes:
-      - /srv/linkding-data:/etc/linkding/data
+      - "/srv/linkding-data:/etc/linkding/data"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.bookmarks.rule=Host(`bookmarks.kyswtn.com`)"

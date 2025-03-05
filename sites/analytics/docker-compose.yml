@@ -39,7 +39,7 @@ services:
     networks:
       - umami
     volumes:
-      - umami-db-data:/var/lib/postgresql/data
+      - "umami-db-data:/var/lib/postgresql/data"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
       interval: 5s
@@ -56,7 +56,7 @@ services:
     networks:
       - umami
     volumes:
-      - /srv/umami-postgres-backups:/backups
+      - "/srv/umami-postgres-backups:/backups"
     env_file: .env
     environment:
       POSTGRES_HOST: "db"

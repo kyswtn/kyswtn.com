@@ -20,8 +20,8 @@ services:
     networks:
       - traefik
     volumes:
-      - n8n_data:/home/node/.n8n
-      - ./local_files:/files
+      - "n8n_data:/home/node/.n8n"
+      - "./local_files:/files"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.n8n.rule=Host(`$N8N_HOST`)"
