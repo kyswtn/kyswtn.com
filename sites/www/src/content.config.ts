@@ -22,6 +22,7 @@ const posts = defineCollection({
     unlisted: z.boolean().default(false),
     tags: z.string().array().default([]),
     date: z.coerce.date(),
+    sup: z.string().optional(),
   }),
 })
 

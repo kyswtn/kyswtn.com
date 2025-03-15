@@ -12,6 +12,7 @@ posts = posts.sort((prev, next) => next.data.date.valueOf() - prev.data.date.val
       <li>
         <a class="!decoration-none" href={`/posts/${post.id}`}>
           {post.data.title}
+          {post.data.sup ? <sup class="italic text-orange-11">{post.data.sup}</sup> : null}
         </a>
         <div class="dash" />
         <div class="text-gray-11">{formatDate(post.data.date)}</div>
