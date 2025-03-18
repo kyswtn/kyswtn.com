@@ -55,10 +55,12 @@
 
               HOSTNAME="nixos"
               SERVER_HOST="''\${2:-$HOSTNAME}"
+
+              DOCKER_ARGS="$@"
  
               ssh "$SERVER_HOST" "mkdir -p /root/$FOLDER_NAME"
-              rsync -avz "$FOLDER_PATH/" "$SERVER_HOST:/root/$FOLDER_NAME/"
-              ssh "$SERVER_HOST" "cd /root/$FOLDER_NAME && docker compose up -d"
+              rsync -avz --exclude='node_modules' "$FOLDER_PATH/" "$SERVER_HOST:/root/$FOLDER_NAME/"
+              ssh "$SERVER_HOST" "cd /root/$FOLDER_NAME && docker compose up -d $DOCKER_ARGS"
             '')
           ];
         };

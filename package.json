@@ -1,6 +1,6 @@
 {
   "name": "kyswtn-com",
-  "workspaces": ["sites/*", "packages/*"],
+  "workspaces": ["sites/www", "packages/*"],
   "scripts": {
     "preinstall": "./load-submodules.sh"
   }
