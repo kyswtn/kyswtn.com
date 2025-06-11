@@ -17,7 +17,7 @@ in
   # Configure mandatory stuff.
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
-  time.timeZone = "Europe/Berlin";
+  time.timeZone = "Europe/Helsinki";
   i18n.defaultLocale = "en_US.UTF-8";
 
   # Configure Nix.

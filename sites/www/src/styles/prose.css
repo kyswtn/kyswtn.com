@@ -9,6 +9,7 @@
   --mark-bg-color: var(--yellowA4);
   --table-strip-bg-color: var(--grayA2);
   --code-diff-add-bg-color: var(--greenA3);
+  --code-diff-remove-bg-color: var(--redA3);
   --font-mono: 'Monaco', ui-monospace, 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New',
     monospace;
 }
@@ -260,6 +261,9 @@
   margin: 0 -1.25rem;
   padding: 0 1.25rem;
 }
+.prose pre code .highlighted.error {
+  background: var(--code-diff-remove-bg-color);
+}
 .prose pre code .diff.add::before {
   content: '+';
   position: absolute;
@@ -268,6 +272,17 @@
   display: inline-block;
   width: calc(100% + 2.5rem);
   background: var(--code-diff-add-bg-color);
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem;
+}
+.prose pre code .diff.remove::before {
+  content: '-';
+  position: absolute;
+}
+.prose pre code .diff.remove {
+  display: inline-block;
+  width: calc(100% + 2.5rem);
+  background: var(--code-diff-remove-bg-color);
   margin: 0 -1.25rem;
   padding: 0 1.25rem;
 }

@@ -16,7 +16,7 @@ services:
       N8N_PROTOCOL: "https"
       NODE_ENV: "production"
       WEBHOOK_URL: "https://${N8N_HOST}"
-      GENERIC_TIMEZONE: "Europe/Berlin"
+      GENERIC_TIMEZONE: "Europe/Helsinki"
     networks:
       - traefik
     volumes:

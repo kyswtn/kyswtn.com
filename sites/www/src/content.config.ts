@@ -27,7 +27,7 @@ const posts = defineCollection({
 })
 
 const tags = defineCollection({
-  loader: file('../../notes/tags.yml',),
+  loader: file('../../notes/tags.yml'),
   schema: z.object({
     name: z.string(),
   }),
@@ -62,15 +62,18 @@ const perusal = defineCollection({
   }),
 })
 
-// Progress updates are VERY similar to posts, and inherit things such as tags.
-const progress = defineCollection({
-  loader: glob({pattern: '**/*.{md,mdx}', base: '../../notes/progress'}),
+const notes = defineCollection({
+  loader: glob({pattern: '**/*.{md,mdx}', base: '../../notes/uncategorized'}),
   schema: z.object({
     title: z.string(),
     shortTitle: z.string().optional(),
-    status: z.string(),
-    startedDate: z.coerce.date(),
+    ogBackground: z.enum(['doggo', 'sit', 'walk']).optional(),
+    description: z.string(),
+    published: z.boolean().default(false),
+    unlisted: z.boolean().default(false),
     tags: z.string().array().default([]),
+    date: z.coerce.date(),
+    sup: z.string().optional(),
   }),
 })
 
@@ -88,4 +91,4 @@ const micro = defineCollection({
   }),
 })
 
-export const collections = {website, posts, tags, projects, perusal, progress, micro}
+export const collections = {website, posts, tags, projects, perusal, notes, micro}

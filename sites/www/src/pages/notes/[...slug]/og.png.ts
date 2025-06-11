@@ -4,11 +4,11 @@ import {getOGImage} from '@/lib/og'
 import type {APIRoute} from 'astro'
 
 export {getStaticPaths} from './index.astro'
-export const GET: APIRoute<CollectionEntry<'posts'>> = async ({props}) => {
+export const GET: APIRoute<CollectionEntry<'notes'>> = async ({props}) => {
   return getOGImage(() =>
     OGTemplate({
       title: props.data.shortTitle ?? props.data.title,
-      background: props.id === 'about' ? 'doggo' : undefined,
+      background: props.data.ogBackground,
     }),
   )
 }

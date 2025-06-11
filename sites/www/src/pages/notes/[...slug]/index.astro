@@ -1,0 +1,114 @@
+---
+import {type CollectionEntry, getCollection, render} from 'astro:content'
+import Sidenote from '@/components/Sidenote.astro'
+import TOC from '@/components/TOC.astro'
+import TOCScript from '@/components/TOCScript.astro'
+import Tags, {type Tag} from '@/components/Tags.astro'
+import PostLayout from '@/layouts/PostLayout.astro'
+import {formatDate} from '@/lib/dnt'
+import {Icon} from 'astro-icon/components'
+
+type Note = CollectionEntry<'notes'>
+export async function getStaticPaths() {
+  const notes = await getCollection('notes')
+  const listedPosts = notes.filter((note) => !note.data.unlisted)
+
+  const tags = await getCollection('tags')
+  const tagNames = Object.fromEntries(tags.map((tag) => [tag.id, tag.data.name]))
+
+  return notes.map((post, i) => {
+    const tags: Tag[] = post.data.tags.map((id) => ({id, name: tagNames[id] ?? id}))
+    const previous = listedPosts[i + 1]
+    const next = listedPosts[i - 1]
+    return {
+      params: {slug: post.id},
+      props: {...post, tags, previous, next},
+    }
+  })
+}
+
+export type Props<T = Note> = T & {tags: Tag[]; previous?: T; next?: T}
+const {previous, next, ...note} = Astro.props
+
+const {Content, remarkPluginFrontmatter: frontmatter, headings: _headings} = await render(note)
+const readingTime = frontmatter.readingTime as string
+const headings = _headings.filter((h) => h.depth === 3)
+---
+
+<PostLayout title={note.data.title} description={note.data.description}>
+  {headings.length > 0 && <TOCScript slot="head" />}
+
+  <Fragment slot="aside-left">
+    <nav>
+      <a class="styled font-sans" href="/">
+        <Icon name="material-symbols:arrow-back" class="inline-block align-middle" />
+        <span>Home</span>
+      </a>
+    </nav>
+    <div class="flex-1"></div>
+    {
+      headings.length > 0 && (
+        <div class="hidden xl:block">
+          <TOC headings={headings} />
+        </div>
+      )
+    }
+    {
+      note.tags.length > 0 && (
+        <div class="mt-5 hidden xl:block">
+          <Tags tags={note.tags} />
+        </div>
+      )
+    }
+  </Fragment>
+
+  <Fragment slot="title">
+    <div class="flex flex-col">
+      <h2 class="font-semibold text-2xl">
+        {note.data.title}
+      </h2>
+      <div class="flex flex-row items-center gap-2.5 text-gray-11 font-sans">
+        {
+          note.data.published ? (
+            <Fragment>
+              <span>{formatDate(note.data.date)}</span>
+              <Icon name="material-symbols:search-activity-rounded" />
+              <span>{readingTime}</span>
+            </Fragment>
+          ) : (
+            <span>{note.data.description}</span>
+          )
+        }
+      </div>
+    </div>
+    {
+      !note.data.published ? (
+        <div class="prose mt-10 xl:mt-0">
+          <Sidenote refback>
+            <p>
+              This page is in{' '}
+              <span class="italic text-blue-11">
+                <Icon name="material-symbols:edit-outline" class="inline align-middle" /> draft mode
+              </span>
+              meaning the content here is subject to change.
+            </p>
+          </Sidenote>
+        </div>
+      ) : null
+    }
+  </Fragment>
+
+  <Fragment slot="article">
+    <Content />
+  </Fragment>
+
+  <Fragment slot="footnotes">
+    {
+      note.tags.length > 0 && (
+        <div class="pt-10 block xl:hidden">
+          <Tags tags={note.tags} />
+        </div>
+      )
+    }
+  </Fragment>
+</PostLayout>

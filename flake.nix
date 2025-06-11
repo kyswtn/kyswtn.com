@@ -67,7 +67,7 @@
       });
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        system = "aarch64-darwin";
+        system = "aarch64-linux";
         modules = [
           ./nixos/configuration.nix
         ];

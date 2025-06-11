@@ -8,7 +8,7 @@ export const GET: APIRoute<CollectionEntry<'posts'>> = async ({props}) => {
   return getOGImage(() =>
     OGTemplate({
       title: props.data.shortTitle ?? props.data.title,
-      background: props.id === 'about' ? 'doggo' : undefined,
+      background: props.id === 'about' ? 'doggo' : props.data.ogBackground,
     }),
   )
 }

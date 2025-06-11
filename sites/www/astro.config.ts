@@ -2,7 +2,11 @@ import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import rehypeShiki, {type RehypeShikiOptions} from '@shikijs/rehype'
-import {transformerMetaHighlight, transformerNotationDiff} from '@shikijs/transformers'
+import {
+  transformerMetaHighlight,
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+} from '@shikijs/transformers'
 import compress from 'astro-compress'
 import icon from 'astro-icon'
 import purgecss from 'astro-purgecss'
@@ -47,7 +51,11 @@ export default defineConfig({
     shikiConfig: {
       themes: shikiThemes,
       // @ts-ignore
-      transformers: [transformerMetaHighlight(), transformerNotationDiff({matchAlgorithm: 'v3'})],
+      transformers: [
+        transformerMetaHighlight(),
+        transformerNotationDiff({matchAlgorithm: 'v3'}),
+        transformerNotationErrorLevel({matchAlgorithm: 'v3'}),
+      ],
     },
     remarkPlugins: [remarkReadingTime, remarkDirective, remarkSidenotes],
     rehypePlugins: [
