@@ -1,13 +1,12 @@
 ---
 export type Props = {
   side?: 'left' | 'right'
-  refback?: boolean
 }
 
-const {side = 'right', refback = false} = Astro.props
+const {side = 'right'} = Astro.props
 ---
 
-<aside class:list={['sidenote', refback && 'refback']}>
+<aside class:list={['sidenote']}>
   <div>
     {
       side === 'left' && (

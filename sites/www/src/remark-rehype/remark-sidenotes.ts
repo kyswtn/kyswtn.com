@@ -6,13 +6,13 @@ import {visit} from 'unist-util-visit'
 
 export function remarkSidenotes() {
   return (tree: Root) => {
-    visit(tree, (node) => {
+    visit(tree, (node, index, parent) => {
       if (
         node.type === 'containerDirective' ||
         node.type === 'leafDirective' ||
         node.type === 'textDirective'
       ) {
-        if (node.name !== 'sidenote') return
+        if (node.name !== 'sidenote' || !parent || typeof index !== 'number') return
 
         const data = node.data || (node.data = {})
         const classList = node.attributes?.class?.split(' ') ?? []
@@ -25,10 +25,15 @@ export function remarkSidenotes() {
           classList.splice(left, 1)
         }
 
-        const tree = h('aside', {...node.attributes, class: classList.join(' ')}, ...children)
-        data.hName = tree.tagName
-        data.hProperties = tree.properties
-        data.hChildren = tree.children
+        const aside = h('aside', {...node.attributes, class: classList.join(' ')}, ...children)
+        const referenced = parent.children[index - 1]
+        if (!referenced) return
+        parent.children.splice(index - 1, 1) // Delete referenced element.
+
+        const wrapperDiv = h('div', {class: 'with-sidenote'}, [aside, toHast(referenced)])
+        data.hName = wrapperDiv.tagName
+        data.hProperties = wrapperDiv.properties
+        data.hChildren = wrapperDiv.children
       }
     })
   }

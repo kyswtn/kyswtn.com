@@ -35,11 +35,13 @@ if (!websiteMeta) throw new Error('Missing website/meta')
   </Fragment>
 
   <Fragment slot="article">
-    <Sidenote refback>
-      <blockquote>
-        Perhaps you want to learn more <a href="/posts/about">about me</a>?
-      </blockquote>
-    </Sidenote>
+    <div class="p-0 xl:pb-1.5">
+      <Sidenote>
+        <blockquote>
+          Perhaps you want to learn more <a href="/posts/about">about me</a>?
+        </blockquote>
+      </Sidenote>
+    </div>
 
     <h3>Posts</h3>
     <PostsList />
