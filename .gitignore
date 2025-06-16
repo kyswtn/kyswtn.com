@@ -4,6 +4,7 @@ node_modules/
 dist/
 .astro/
 .env*
+!.envrc
 !.env.example
 !.env.1password
 .terraform/
