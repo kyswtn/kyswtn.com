@@ -233,10 +233,10 @@
 .prose pre {
   position: relative;
   overflow-x: scroll;
-  width: calc(100% + 2.5rem);
-  margin-left: -1.25rem;
+  width: calc(100% + 2rem);
+  margin-left: -1rem;
   background: transparent;
-  padding: 1.25rem 0;
+  padding: 1rem 0;
   border-style: solid;
   border-color: var(--border-color);
   border-width: 1.5px 0;
@@ -250,7 +250,7 @@
   display: block;
   min-width: 100%;
   width: fit-content;
-  padding: 0 1.25rem;
+  padding: 0 1rem;
 }
 
 /* Code block highlights and diffs */
@@ -258,8 +258,8 @@
   display: inline-block;
   width: calc(100% + 2.5rem);
   background: var(--inline-code-bg-color);
-  margin: 0 -1.25rem;
-  padding: 0 1.25rem;
+  margin: 0 -1rem;
+  padding: 0 1rem;
 }
 .prose pre code .highlighted.error {
   background: var(--code-diff-remove-bg-color);
@@ -272,8 +272,8 @@
   display: inline-block;
   width: calc(100% + 2.5rem);
   background: var(--code-diff-add-bg-color);
-  margin: 0 -1.25rem;
-  padding: 0 1.25rem;
+  margin: 0 -1rem;
+  padding: 0 1rem;
 }
 .prose pre code .diff.remove::before {
   content: "-";
@@ -283,8 +283,8 @@
   display: inline-block;
   width: calc(100% + 2.5rem);
   background: var(--code-diff-remove-bg-color);
-  margin: 0 -1.25rem;
-  padding: 0 1.25rem;
+  margin: 0 -1rem;
+  padding: 0 1rem;
 }
 
 /* Add left and right borders to code blocks and table only on desktop. */
@@ -377,7 +377,7 @@
   .prose .sidenote > *:nth-child(3) > * {
     transform: translateY(0);
     position: absolute;
-    padding: 0 2.5rem 0 1.25rem;
+    padding: 0 2rem 0 1rem;
     & > * {
       margin-top: 0;
     }

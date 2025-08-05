@@ -16,7 +16,7 @@ export default defineConfig({
   theme: {
     fontFamily,
     letterSpacing: {
-      serif: '-0.018em',
+      serif: '-0.015em',
     },
   },
   shortcuts: {
