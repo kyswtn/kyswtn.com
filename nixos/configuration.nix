@@ -15,7 +15,7 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Configure mandatory stuff.
-  networking.hostName = "nixos";
+  networking.hostName = "vps1";
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/Helsinki";
   i18n.defaultLocale = "en_US.UTF-8";

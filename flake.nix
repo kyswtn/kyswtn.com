@@ -33,7 +33,7 @@
             terraform-ls
 
             (pkgs.writeShellScriptBin "nixos-redeploy" ''
-              HOSTNAME="nixos"
+              HOSTNAME="vps1"
               SERVER_HOST="''\${1:-$HOSTNAME}"
               ${nixos-rebuild}/bin/nixos-rebuild switch \
                 --flake .#$HOSTNAME --fast \
@@ -53,7 +53,7 @@
                 [[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
               fi
 
-              HOSTNAME="nixos"
+              HOSTNAME="vps1"
               SERVER_HOST="''\${2:-$HOSTNAME}"
 
               DOCKER_ARGS="$@"
@@ -66,7 +66,7 @@
         };
       });
 
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.vps1 = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
         modules = [
           ./nixos/configuration.nix

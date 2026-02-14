@@ -36,3 +36,7 @@ Once provisioned, the VPS is then configured remotely via [`nixos-rebuild`](http
 NixOS configurations setup [Docker](https://www.docker.com) and [Traefik](https://traefik.io/traefik). Traefik handles routing, SSL/TLS certificates, and load balancing with it's [Docker Provider](https://doc.traefik.io/traefik/reference/install-configuration/providers/docker). Its dashboard is made accessible at `traefik` subdomain only within Tailscale’s private network.
 
 Many other services such as [Linkding](https://linkding.link) for bookmarks, [N8n](https://n8n.io) for automations etc. are implemented as [Docker Compose](https://docs.docker.com/compose) configuration files within `./sites`. Each service is configured either with [named external volumes](https://docs.docker.com/engine/storage/volumes) and handles it's own database backup or with [bind mounts](https://docs.docker.com/engine/storage/bind-mounts) within `/srv`. `/srv` is then backed up to Cloudflare R2 on a [daily basis](https://wiki.nixos.org/wiki/Systemd/timers/en) using [Restic](https://restic.net).
+
+### Problems
+
+This setup, albeit being very carefully structured, is not without problems. One such inconvenience might be that running `nixos-redeploy` after the VPS's `/nix/store` has been garbage-collected might result in `nixos-rebuild` having to copy store artifacts via SSH which is torturously slow. In such cases, SSH-ing into the VPS, cloning the repository and then running `nixos-rebuild` there manually helps. On subsequent `nixos-redeploy`, the hiccup shouldn't persist.
