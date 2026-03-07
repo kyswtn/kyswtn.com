@@ -43,7 +43,7 @@ export default defineConfig({
     enabled: false,
   },
   experimental: {
-    svg: true,
+    svgo: true,
   },
   markdown: {
     remarkRehype: {},
